@@ -35,6 +35,9 @@ const UmlEditor: React.FC = () => {
   const [umlData, setUmlData] = useState<UmlData | null>(null);
   const [modelTimestamp, setModelTimestamp] = useState<number>(0);
   
+  // State for current active diagram
+  const [currentDiagram, setCurrentDiagram] = useState<SavedDiagram | null>(null);
+  
   // Reference to track which classes have been added to the diagram
   const addedClassesRef = useRef<Set<string>>(new Set());
   
@@ -46,6 +49,7 @@ const UmlEditor: React.FC = () => {
     setNodes([]);
     setEdges([]);
     addedClassesRef.current = new Set();
+    setCurrentDiagram(null);
   };
 
   // Create a node for a UML class
@@ -157,15 +161,45 @@ const UmlEditor: React.FC = () => {
     setNodes([]);
     setEdges([]);
     addedClassesRef.current = new Set();
+    setCurrentDiagram(null);
   };
-
   // Save diagram handler
-  const handleSaveDiagram = (name: string) => {
-    saveDiagram(
-      name,
-      { nodes, edges },
-      modelTimestamp
-    );
+  const handleSaveDiagram = (name: string, saveAsNew: boolean = false) => {
+    const diagramState = { nodes, edges };
+    
+    // If saving as new or no current diagram, create a new one
+    if (saveAsNew || !currentDiagram) {
+      saveDiagram(
+        name,
+        diagramState,
+        modelTimestamp
+      );
+      
+      // Update current diagram with a new placeholder
+      // The actual ID will be generated in the saveDiagram function
+      setCurrentDiagram({
+        id: `diagram_${Date.now()}`,
+        name,
+        state: diagramState,
+        modelTimestamp
+      });
+    } else {
+      // Overwrite existing diagram
+      saveDiagram(
+        name,
+        diagramState,
+        modelTimestamp,
+        currentDiagram.id
+      );
+      
+      // Update current diagram reference
+      setCurrentDiagram({
+        ...currentDiagram,
+        name,
+        state: diagramState,
+        modelTimestamp
+      });
+    }
   };
 
   // Load diagram handler
@@ -183,11 +217,25 @@ const UmlEditor: React.FC = () => {
     diagram.state.nodes.forEach(node => {
       addedClassesRef.current.add(node.id);
     });
+    
+    setCurrentDiagram(diagram);
+  };
+
+  // Reimport UML data from JSON file without resetting diagram
+  const handleReimportData = (data: UmlData) => {
+    setUmlData(data);
+    setModelTimestamp(Date.now());
+    
+    // Keep the diagram but update the class data
+    if (nodes.length > 0) {
+      handleReloadModel(data);
+    }
   };
 
   // Reload model handler (keeps layout but updates data)
-  const handleReloadModel = () => {
-    if (!umlData) return;
+  const handleReloadModel = (newData?: UmlData) => {
+    const dataToUse = newData || umlData;
+    if (!dataToUse) return;
     
     // Keep track of existing node positions
     const nodePositions = nodes.reduce((acc, node) => {
@@ -197,7 +245,7 @@ const UmlEditor: React.FC = () => {
     
     // Recreate nodes with updated class data but keep positions
     const updatedNodes = Array.from(addedClassesRef.current).map(classId => {
-      const classItem = umlData.umlModel.classes.find(c => c.id === classId);
+      const classItem = dataToUse.umlModel.classes.find(c => c.id === classId);
       if (!classItem) return null;
       
       return createClassNode(
@@ -208,15 +256,17 @@ const UmlEditor: React.FC = () => {
     
     // Update edges
     const updatedEdges = createRelationEdges(
-      umlData.umlModel.relations,
+      dataToUse.umlModel.relations,
       addedClassesRef.current
     );
     
     setNodes(updatedNodes);
     setEdges(updatedEdges);
-    setModelTimestamp(Date.now());
+    
+    if (!newData) {
+      setModelTimestamp(Date.now());
+    }
   };
-
   return (
     <div className="uml-editor">
       <DiagramToolbar
@@ -224,7 +274,9 @@ const UmlEditor: React.FC = () => {
         onSaveDiagram={handleSaveDiagram}
         onLoadDiagram={handleLoadDiagram}
         onReloadModel={handleReloadModel}
+        onReimportData={handleReimportData}
         modelLoaded={!!umlData}
+        currentDiagram={currentDiagram}
       />
       
       <div className="editor-content">

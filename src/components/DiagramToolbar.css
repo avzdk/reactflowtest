@@ -122,8 +122,23 @@
   background-color: #e0e0e0;
 }
 
-.no-diagrams {
-  padding: 20px;
-  text-align: center;
-  color: #777;
+.reimport-dialog {
+  max-width: 600px;
+}
+
+.reimport-dialog p {
+  margin-bottom: 20px;
+}
+
+.current-diagram-info {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  color: #555;
+  font-size: 14px;
+}
+
+.current-diagram-name {
+  font-weight: bold;
+  margin-left: 5px;
 }

@@ -13,6 +13,14 @@
             "datatype": "String",
             "format": "^[A-Z][a-z]+$",
             "example": "Peter"
+          }, 
+          {
+            "id": "a1b2c3d4-1234-5678-abcd-abcdef634321",
+            "name": "efternavn",
+            "multiplicity": "1",
+            "datatype": "String",
+            "format": "^[A-Z][a-z]+$",
+            "example": "Hansen"
           }
         ]
       },

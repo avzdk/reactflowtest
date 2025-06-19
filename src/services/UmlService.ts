@@ -32,22 +32,37 @@ export const loadJsonFile = (file: File): Promise<UmlData> => {
 };
 
 // Service for saving diagram state to local storage
-export const saveDiagram = (name: string, state: DiagramState, modelTimestamp: number): void => {
+export const saveDiagram = (name: string, state: DiagramState, modelTimestamp: number, existingId?: string): void => {
   try {
     // Get existing diagrams
     const diagramsJson = localStorage.getItem('umlDiagrams');
     let diagrams: SavedDiagram[] = diagramsJson ? JSON.parse(diagramsJson) : [];
     
-    // Generate a unique ID
-    const id = `diagram_${Date.now()}`;
-    
-    // Add new diagram
-    diagrams.push({
-      id,
-      name,
-      state,
-      modelTimestamp
-    });
+    if (existingId) {
+      // Find and update existing diagram
+      const index = diagrams.findIndex(d => d.id === existingId);
+      if (index !== -1) {
+        diagrams[index] = {
+          id: existingId,
+          name,
+          state,
+          modelTimestamp
+        };
+      } else {
+        throw new Error('Diagram not found.');
+      }
+    } else {
+      // Generate a unique ID for new diagram
+      const id = `diagram_${Date.now()}`;
+      
+      // Add new diagram
+      diagrams.push({
+        id,
+        name,
+        state,
+        modelTimestamp
+      });
+    }
     
     // Save to local storage
     localStorage.setItem('umlDiagrams', JSON.stringify(diagrams));

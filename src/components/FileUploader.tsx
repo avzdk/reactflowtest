@@ -5,9 +5,10 @@ import './FileUploader.css';
 
 interface FileUploaderProps {
   onDataLoaded: (data: UmlData) => void;
+  isReimport?: boolean;
 }
 
-const FileUploader: React.FC<FileUploaderProps> = ({ onDataLoaded }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ onDataLoaded, isReimport = false }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
