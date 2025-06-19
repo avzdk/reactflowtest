@@ -1,0 +1,44 @@
+.class-node {
+  padding: 0;
+  border-radius: 3px;
+  width: 220px;
+  font-size: 12px;
+  color: #222;
+  text-align: left;
+  border: 1px solid #1a192b;
+  background-color: white;
+}
+
+.class-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid #1a192b;
+  background-color: #f8f8f8;
+  text-align: center;
+}
+
+.class-attributes {
+  padding: 8px 10px;
+}
+
+.attribute {
+  margin-bottom: 4px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.attribute-name {
+  margin-right: 4px;
+}
+
+.attribute-type {
+  color: #777;
+}
+
+.attribute-multiplicity {
+  margin-left: 4px;
+  color: #0066cc;
+}
+
+.nodrag {
+  pointer-events: none;
+}

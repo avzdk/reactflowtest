@@ -1,0 +1,60 @@
+.uml-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.editor-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.upload-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.diagram-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.class-selector-container {
+  width: 250px;
+  height: 100%;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+}
+
+.react-flow-container {
+  flex: 1;
+  height: 100%;
+}
+
+.react-flow__node-classNode {
+  width: auto;
+  height: auto;
+  border: none;
+  padding: 0;
+}
+
+.react-flow__edge-path {
+  stroke: #333;
+  stroke-width: 1.5;
+}
+
+.react-flow__edge.specialization .react-flow__edge-path {
+  stroke-width: 2;
+}
+
+.react-flow__edge-text {
+  font-size: 12px;
+}

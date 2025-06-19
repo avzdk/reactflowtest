@@ -1,0 +1,71 @@
+{
+  "umlModel": {
+    "classes": [
+      {
+        "id": "c1a2f3e4-5678-1234-abcd-abcdef123456",
+        "name": "Person",
+        "owner": "Gemini",
+        "attributes": [
+          {
+            "id": "a1b2c3d4-1234-5678-abcd-abcdef654321",
+            "name": "fornavn",
+            "multiplicity": "1",
+            "datatype": "String",
+            "format": "^[A-Z][a-z]+$",
+            "example": "Peter"
+          }
+        ]
+      },
+      {
+        "id": "d2e3f4a5-9876-5432-abcd-abcdef987654",
+        "name": "Adresse",
+        "owner": "Gemini",
+        "attributes": [
+          {
+            "id": "b3c4d5e6-2345-6789-abcd-abcdef876543",
+            "name": "vejnavn",
+            "multiplicity": "1",
+            "datatype": "String",
+            "format": null,
+            "example": "Bredgade"
+          }
+        ]
+      },
+      {
+        "id": "e5f6a7b8-3456-7890-abcd-abcdef765432",
+        "name": "Medarbejder",
+        "owner": "Gemini",
+        "attributes": [
+          {
+            "id": "c4d5e6f7-3456-7890-abcd-abcdef654321",
+            "name": "medarbejderNummer",
+            "multiplicity": "1",
+            "datatype": "Integer",
+            "format": null,
+            "example": "12345"
+          }
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r1a2b3c4-4567-8901-abcd-abcdef543210",
+        "name": "borPå",
+        "type": "association",
+        "source": "c1a2f3e4-5678-1234-abcd-abcdef123456",
+        "target": "d2e3f4a5-9876-5432-abcd-abcdef987654",
+        "sourceMultiplicity": "0..*",
+        "targetMultiplicity": "1"
+      },
+      {
+        "id": "r2b3c4d5-5678-9012-abcd-abcdef432109",
+        "name": "erEn",
+        "type": "specialization",
+        "source": "e5f6a7b8-3456-7890-abcd-abcdef765432",
+        "target": "c1a2f3e4-5678-1234-abcd-abcdef123456",
+        "sourceMultiplicity": "1",
+        "targetMultiplicity": "1"
+      }
+    ]
+  }
+}
